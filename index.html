@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Yew Chat</title>
+        <link rel="stylesheet" href="/yew-chat/styles-4d89defd9b27f08.css" integrity="sha384&#x2D;x4nqjJTNhYKbJpJVipETuRg&#x2B;hRJlYWCRkqf&#x2F;3ibjB3eU9p3kMBu47QoXhBhohYUy"/>
+        
+<script type="module" nonce="+9nlqj/rqNAe3bZVyqOFZA==">
+import init, * as bindings from '/yew-chat/yew_chat_app-1a580e9d9f4a120e.js';
+const wasm = await init('/yew-chat/yew_chat_app-1a580e9d9f4a120e_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+    
+<link rel="modulepreload" href="/yew-chat/yew_chat_app-1a580e9d9f4a120e.js" crossorigin=anonymous integrity="sha384-k0gDofiNZgON4XkDgLVBf/KGCPPiBnAOwBLaJaAXgSzS/XbkSE4IBFUEMe30QfS7">
+<link rel="preload" href="/yew-chat/yew_chat_app-1a580e9d9f4a120e_bg.wasm" crossorigin=anonymous integrity="sha384-nC5KH8Ym5K6ex6MUjpAIlaMFsOHFgCe4oPd2vN3bAbH71gpOCBChB1RnlmvENkTH" as="fetch" type="application/wasm"></head>
+    <body>
+        <div id="app"></div>
+    </body>
+</html>
