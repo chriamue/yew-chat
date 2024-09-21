@@ -1,0 +1,18 @@
+[package]
+name = "yew-chat"
+version = "0.1.0"
+edition = "2021"
+description = "A simple chat application built with Yew"
+
+[[bin]]
+name = "yew_chat_app"
+path = "src/app.rs"
+
+[lib]
+name = "yew_chat"
+path = "src/lib.rs"
+
+[dependencies]
+log = "0.4"
+yew = { version = "0.21", features = ["csr"] }
+web-sys = "0.3"
