@@ -12,7 +12,7 @@ struct SimpleMessageHandler {
 
 #[async_trait(?Send)]
 impl MessageSender for SimpleMessageHandler {
-    async fn send_message(&self, message: Message) -> Result<(), SendError> {
+    async fn send_message(&self, _channel: &str, message: Message) -> Result<(), SendError> {
         let mut queue = (*self.message_queue).clone();
         queue.push(message);
         self.message_queue.set(queue);
@@ -71,7 +71,7 @@ pub fn app() -> Html {
     html! {
         <div>
             <ChatComp chat={(*chat).clone()} />
-            <MessageInputComp current_user={user} sender={sender.clone()} />
+            <MessageInputComp channel={"channel1".to_string()} current_user={user} sender={sender.clone()} />
         </div>
     }
 }

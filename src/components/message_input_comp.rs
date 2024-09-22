@@ -5,6 +5,7 @@ use yew::prelude::*;
 
 #[derive(Properties, Clone)]
 pub struct MessageInputProps {
+    pub channel: String,
     pub sender: Rc<dyn MessageSender>,
     pub current_user: String,
 }
@@ -18,6 +19,7 @@ impl PartialEq for MessageInputProps {
 #[function_component(MessageInputComp)]
 pub fn message_input_comp(props: &MessageInputProps) -> Html {
     let on_submit = {
+        let channel = props.channel.clone();
         let sender = props.sender.clone();
         let current_user = props.current_user.clone();
 
@@ -28,9 +30,10 @@ pub fn message_input_comp(props: &MessageInputProps) -> Html {
                 timestamp: chrono::Utc::now(),
             };
             wasm_bindgen_futures::spawn_local({
+                let channel = channel.clone();
                 let sender = sender.clone();
                 async move {
-                    match sender.send_message(message).await {
+                    match sender.send_message(&channel, message).await {
                         Ok(_) => {
                             log::info!("Message sent successfully");
                         }
