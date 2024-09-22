@@ -38,13 +38,20 @@ body {
 .message-header {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
     margin-bottom: 5px;
     font-size: 0.8em;
     color: #666;
+    width: 100%;
 }
 
 .message-sender {
     font-weight: bold;
+    margin-right: 10px;
+}
+
+.message-timestamp {
+    flex-shrink: 0;
 }
 
 .message-content {

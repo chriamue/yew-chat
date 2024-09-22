@@ -11,7 +11,7 @@ pub fn app() -> Html {
             let message = Message {
                 sender: "Me".to_string(),
                 content,
-                timestamp: chrono::Local::now().to_rfc2822(),
+                timestamp: chrono::Local::now().into(),
             };
             let mut updated_chat: Chat = (*chat).clone();
             updated_chat.add_message(message);
