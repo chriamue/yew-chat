@@ -1,0 +1,38 @@
+@startuml C4_Yew_Chat
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "A person using the chat application")
+
+System_Boundary(yew_chat, "Yew Chat Application") {
+    Container(browser, "Web Browser", "Chrome, Firefox, Safari", "Runs the Yew application")
+
+    Container(yew_app, "Yew Application", "Rust, WebAssembly", "Handles UI rendering and user interactions")
+
+    Container_Boundary(yew_components, "Yew Components") {
+        Component(app_component, "App Component", "Main application component")
+        Component(chat_comp, "ChatComp", "Displays chat messages")
+        Component(message_input_comp, "MessageInputComp", "Handles message input")
+        Component(message_comp, "MessageComp", "Renders individual messages")
+        Component(input_comp, "Input Component", "Generic input component")
+    }
+
+    Component(simple_message_handler, "SimpleMessageHandler", "Handles message sending and receiving")
+
+    ContainerDb(message_queue, "Message Queue", "In-memory", "Stores messages temporarily")
+}
+
+Rel(user, browser, "Uses", "HTTPS")
+Rel(browser, yew_app, "Loads and runs")
+
+Rel(yew_app, app_component, "Renders")
+Rel(app_component, chat_comp, "Uses")
+Rel(app_component, message_input_comp, "Uses")
+Rel(chat_comp, message_comp, "Uses")
+Rel(message_input_comp, input_comp, "Uses")
+
+Rel(app_component, simple_message_handler, "Uses")
+Rel(simple_message_handler, message_queue, "Reads from and writes to")
+
+@enduml
