@@ -1,33 +1,28 @@
 use yew::prelude::*;
-use yew_chat::prelude::{Input, Message, MessageComp};
+use yew_chat::prelude::{Chat, Input, Message, MessageComp};
 
 #[function_component(App)]
 fn app() -> Html {
-    let messages = use_state(|| Vec::<Message>::new());
+    let chat = use_state(|| Chat::new("channel1".to_string()));
 
     let on_submit = {
-        let messages = messages.clone();
+        let chat = chat.clone();
         Callback::from(move |content: String| {
             let message = Message {
                 sender: "Me".to_string(),
                 content,
                 timestamp: chrono::Local::now().to_rfc2822(),
             };
-
-            messages.set(
-                messages
-                    .iter()
-                    .cloned()
-                    .chain(std::iter::once(message))
-                    .collect::<Vec<_>>(),
-            );
+            let mut updated_chat: Chat = (*chat).clone();
+            updated_chat.add_message(message);
+            chat.set(updated_chat);
         })
     };
 
     html! {
         <div>
             <div class="chat">
-                {for messages.iter().map(|message| {
+                {for chat.get_messages().iter().map(|message| {
                     html! {
                         <MessageComp message={message.clone()} />
                     }
