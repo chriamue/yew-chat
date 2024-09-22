@@ -4,5 +4,5 @@ use async_trait::async_trait;
 
 #[async_trait(?Send)]
 pub trait MessageReceiver {
-    fn receive_message(&self) -> Result<Message, ReceiveError>;
+    fn receive_messages(&self, channel: &str) -> Result<Vec<Message>, ReceiveError>;
 }

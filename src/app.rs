@@ -21,12 +21,11 @@ impl MessageSender for SimpleMessageHandler {
 }
 
 impl MessageReceiver for SimpleMessageHandler {
-    fn receive_message(&self) -> Result<Message, ReceiveError> {
-        let mut queue = (*self.message_queue).clone();
+    fn receive_messages(&self, _channel: &str) -> Result<Vec<Message>, ReceiveError> {
+        let queue = (*self.message_queue).clone();
         if !queue.is_empty() {
-            let message = queue.remove(0);
-            self.message_queue.set(queue);
-            Ok(message)
+            self.message_queue.set(Vec::new());
+            Ok(queue)
         } else {
             Err(ReceiveError::UnknownError)
         }
@@ -56,9 +55,11 @@ pub fn app() -> Html {
 
             let interval = gloo::timers::callback::Interval::new(1000, move || {
                 let chat = chat.clone();
-                if let Ok(message) = receiver.receive_message() {
+                if let Ok(messages) = receiver.receive_messages("channel1") {
                     let mut updated_chat = (*chat).clone();
-                    updated_chat.add_message(message);
+                    for message in messages {
+                        updated_chat.add_message(message);
+                    }
                     chat.set(updated_chat);
                 }
             });
