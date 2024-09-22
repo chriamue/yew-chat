@@ -6,14 +6,18 @@ description = "A simple chat application built with Yew"
 
 [[bin]]
 name = "yew_chat_app"
-path = "src/app.rs"
+path = "src/main.rs"
 
 [lib]
 name = "yew_chat"
 path = "src/lib.rs"
 
+[features]
+default = ["yew"]
+yew = ["dep:yew"]
+
 [dependencies]
 log = "0.4"
-yew = { version = "0.21", features = ["csr"] }
+yew = { version = "0.21", features = ["csr"], optional = true }
 web-sys = "0.3"
 chrono = "0.4"

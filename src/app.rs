@@ -1,5 +1,5 @@
 use yew::prelude::*;
-use yew_chat::prelude::{Chat, Input, Message, MessageComp};
+use yew_chat::prelude::{Chat, ChatComp, Input, Message};
 
 #[function_component(App)]
 pub fn app() -> Html {
@@ -21,13 +21,7 @@ pub fn app() -> Html {
 
     html! {
         <div>
-            <div class="chat">
-                {for chat.get_messages().iter().map(|message| {
-                    html! {
-                        <MessageComp message={message.clone()} />
-                    }
-                })}
-            </div>
+            <ChatComp chat={(*chat).clone()} />
             <Input {on_submit} />
         </div>
     }
