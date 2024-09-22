@@ -2,7 +2,7 @@ use yew::prelude::*;
 use yew_chat::prelude::{Chat, Input, Message, MessageComp};
 
 #[function_component(App)]
-fn app() -> Html {
+pub fn app() -> Html {
     let chat = use_state(|| Chat::new("channel1".to_string()));
 
     let on_submit = {
@@ -31,8 +31,4 @@ fn app() -> Html {
             <Input {on_submit} />
         </div>
     }
-}
-
-fn main() {
-    yew::Renderer::<App>::new().render();
 }
