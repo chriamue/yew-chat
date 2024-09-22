@@ -8,19 +8,31 @@ description = "A simple chat application built with Yew"
 name = "yew_chat_app"
 path = "src/main.rs"
 
+[[bin]]
+name = "yew_chat_server"
+path = "src/server/main.rs"
+required-features = ["server"]
+
 [lib]
 name = "yew_chat"
 path = "src/lib.rs"
 
 [features]
 default = ["yew"]
+server = ["axum", "axum-macros", "tokio", "tower-http"]
 yew = ["dep:yew", "web-sys", "wasm-bindgen-futures", "gloo"]
 
 [dependencies]
 async-trait = "0.1.82"
-chrono = "0.4"
+axum = { version = "0.7", features = ["macros"], optional = true }
+axum-macros = { version = "0.3", optional = true }
+chrono = { version = "0.4", features = ["serde"] }
 gloo = { version = "0.11", features = ["timers"], optional = true }
 log = "0.4"
-yew = { version = "0.21", features = ["csr"], optional = true }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"], optional = true }
+tower-http = { version = "0.5.2", features = ["cors"], optional = true }
 web-sys = { version = "0.3", optional = true }
 wasm-bindgen-futures = { version = "0.4", optional = true }
+yew = { version = "0.21", features = ["csr"], optional = true }

@@ -13,3 +13,17 @@ Below is a C4 diagram representing the architecture of the yew-chat application:
 - Built with Rust and Yew framework
 - WebAssembly for client-side performance
 - In-memory message queue for temporary storage
+
+## Getting Started
+
+### Running the Application
+
+```bash
+trunk serve
+```
+
+### Running the Backend
+
+```bash
+cargo run --bin yew_chat_server --features server
+```

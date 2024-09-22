@@ -1,6 +1,7 @@
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SendError {
     UnknownError,
 }
@@ -15,7 +16,7 @@ impl fmt::Display for SendError {
 
 impl std::error::Error for SendError {}
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ReceiveError {
     UnknownError,
 }

@@ -1,18 +1,18 @@
 use crate::components::Input;
 use crate::model::{Message, MessageSender};
-use std::rc::Rc;
+use std::sync::Arc;
 use yew::prelude::*;
 
 #[derive(Properties, Clone)]
 pub struct MessageInputProps {
     pub channel: String,
-    pub sender: Rc<dyn MessageSender>,
+    pub sender: Arc<dyn MessageSender>,
     pub current_user: String,
 }
 
 impl PartialEq for MessageInputProps {
     fn eq(&self, other: &Self) -> bool {
-        self.current_user == other.current_user && Rc::ptr_eq(&self.sender, &other.sender)
+        self.current_user == other.current_user && Arc::ptr_eq(&self.sender, &other.sender)
     }
 }
 
