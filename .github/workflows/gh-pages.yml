@@ -22,7 +22,7 @@ jobs:
           version: "latest"
 
       - run: rustup target add wasm32-unknown-unknown
-      - run: trunk build --release --public-url /yew-chat/
+      - run: trunk build --features=yew --release --public-url /yew-chat/
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

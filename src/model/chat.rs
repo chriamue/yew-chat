@@ -2,8 +2,8 @@ use super::Message;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Chat {
-    channel: String,
-    messages: Vec<Message>,
+    pub channel: String,
+    pub messages: Vec<Message>,
 }
 
 impl Chat {

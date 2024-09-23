@@ -8,8 +8,8 @@ use utoipa::OpenApi;
     ),
     components(
         schemas(
-            super::routes::SendRequest,
-            super::routes::ReceiveResponse,
+            crate::api::SendRequest,
+            crate::api::ReceiveResponse,
             crate::model::Message,
         )
     ),

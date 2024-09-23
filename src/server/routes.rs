@@ -1,30 +1,19 @@
 use super::MessageStorage;
-use crate::model::{Message, ReceiveError, SendError};
+use crate::model::{ReceiveError, SendError};
 use axum::{
     extract::{Path, State},
     routing::{get, post},
     Json, Router,
 };
 
-use serde::{Deserialize, Serialize};
+use crate::api::{ReceiveResponse, SendRequest};
 use std::sync::Arc;
-use utoipa::ToSchema;
 
 pub fn create_router(storage: Arc<dyn MessageStorage + Send + Sync>) -> Router {
     Router::new()
         .route("/send/:channel", post(send_message))
         .route("/receive/:channel", get(receive_messages))
         .with_state(storage)
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
-pub struct SendRequest {
-    pub message: Message,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
-pub struct ReceiveResponse {
-    pub messages: Vec<Message>,
 }
 
 #[axum::debug_handler]

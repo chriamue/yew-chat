@@ -1,3 +1,4 @@
+mod api;
 #[cfg(feature = "yew")]
 mod components;
 mod model;
@@ -5,6 +6,7 @@ mod model;
 pub mod server;
 
 pub mod prelude {
+    pub use crate::api::*;
     #[cfg(feature = "yew")]
     pub use crate::components::*;
     pub use crate::model::*;
