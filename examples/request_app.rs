@@ -1,47 +1,8 @@
-use async_trait::async_trait;
-use gloo::net::http::Request;
 use std::sync::Arc;
 use yew::prelude::*;
 use yew_chat::prelude::{
-    Chat, ChatComp, Message, MessageInputComp, MessageReceiver, MessageSender, ReceiveError,
-    ReceiveResponse, SendError, SendRequest,
+    Chat, ChatComp, MessageInputComp, MessageReceiver, MessageSender, RequestMessageHandler,
 };
-
-struct RequestMessageHandler {
-    host: String,
-}
-
-#[async_trait(?Send)]
-impl MessageSender for RequestMessageHandler {
-    async fn send_message(&self, channel: &str, message: Message) -> Result<(), SendError> {
-        let body: SendRequest = SendRequest { message };
-        let url = format!("{}/send/{}", self.host, channel);
-        let request = Request::post(&url)
-            .header("Content-Type", "application/json")
-            .body(serde_json::to_string(&body).unwrap())
-            .unwrap();
-        let response = request.send().await.unwrap();
-        if response.status() == 200 {
-            Ok(())
-        } else {
-            Err(SendError::UnknownError)
-        }
-    }
-}
-
-#[async_trait(?Send)]
-impl MessageReceiver for RequestMessageHandler {
-    async fn receive_messages(&self, channel: &str) -> Result<Vec<Message>, ReceiveError> {
-        let url = format!("{}/receive/{}", self.host, channel);
-        let request = Request::get(&url).send().await.unwrap();
-        if request.status() == 200 {
-            let body: ReceiveResponse = request.json().await.unwrap();
-            Ok(body.messages)
-        } else {
-            Err(ReceiveError::UnknownError)
-        }
-    }
-}
 
 #[function_component(App)]
 pub fn app() -> Html {
