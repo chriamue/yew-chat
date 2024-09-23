@@ -69,8 +69,11 @@ pub fn chat_app(props: &ChatAppProps) -> Html {
                 wasm_bindgen_futures::spawn_local(async move {
                     if let Ok(messages) = receiver.receive_messages(&channel).await {
                         let mut updated_chat = (*chat).clone();
+                        // add if not already in chat
                         for message in messages {
-                            updated_chat.add_message(message);
+                            if !updated_chat.messages.contains(&message) {
+                                updated_chat.messages.push(message);
+                            }
                         }
                         chat.set(updated_chat);
                     }
