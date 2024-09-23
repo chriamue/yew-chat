@@ -1,14 +1,18 @@
 use std::sync::Arc;
 use tower_http::cors::CorsLayer;
-use yew_chat::server::create_router;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 use yew_chat::server::MemoryMessageStorage;
+use yew_chat::server::{create_router, ApiDoc};
 
 #[tokio::main]
 async fn main() {
     let storage = Arc::new(MemoryMessageStorage::new());
 
     // Create the router
-    let app = create_router(storage).layer(CorsLayer::permissive());
+    let app = create_router(storage)
+        .layer(CorsLayer::permissive())
+        .merge(SwaggerUi::new("/docs").url("/api-doc/openapi.json", ApiDoc::openapi()));
 
     // Start the Axum server
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();

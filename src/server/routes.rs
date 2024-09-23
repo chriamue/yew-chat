@@ -6,7 +6,9 @@ use axum::{
     Json, Router,
 };
 
+use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+use utoipa::ToSchema;
 
 pub fn create_router(storage: Arc<dyn MessageStorage + Send + Sync>) -> Router {
     Router::new()
@@ -15,12 +17,34 @@ pub fn create_router(storage: Arc<dyn MessageStorage + Send + Sync>) -> Router {
         .with_state(storage)
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
+pub struct SendRequest {
+    pub message: Message,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
+pub struct ReceiveResponse {
+    pub messages: Vec<Message>,
+}
+
 #[axum::debug_handler]
-async fn send_message(
+#[utoipa::path(
+    post,
+    operation_id = "send",
+    tag = "send",
+    path = "/send/{channel}",
+    request_body = SendRequest,
+    responses(
+        (status = 200, description = "Message sent successfully", body = ()),
+        (status = 400, description = "Invalid request data"),
+    )
+)]
+pub async fn send_message(
     State(sender): State<Arc<dyn MessageStorage + Send + Sync>>,
     Path(channel): Path<String>,
-    Json(message): Json<Message>,
+    Json(message): Json<SendRequest>,
 ) -> Result<Json<()>, Json<SendError>> {
+    let message = message.message;
     sender
         .send_message(&channel, message)
         .await
@@ -29,13 +53,23 @@ async fn send_message(
 }
 
 #[axum::debug_handler]
-async fn receive_messages(
+#[utoipa::path(
+    get,
+    operation_id = "receive",
+    tag = "receive",
+    path = "/receive/{channel}",
+    responses(
+        (status = 200, description = "Messages received successfully", body = ReceiveResponse),
+        (status = 400, description = "Invalid request data"),
+    )
+)]
+pub async fn receive_messages(
     State(receiver): State<Arc<dyn MessageStorage + Send + Sync>>,
     Path(channel): Path<String>,
-) -> Result<Json<Vec<Message>>, Json<ReceiveError>> {
+) -> Result<Json<ReceiveResponse>, Json<ReceiveError>> {
     receiver
         .receive_messages(&channel)
         .await
-        .map(Json)
+        .map(|messages| Json(ReceiveResponse { messages }))
         .map_err(Json)
 }
