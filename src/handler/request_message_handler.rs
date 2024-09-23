@@ -30,9 +30,6 @@ impl MessageSender for RequestMessageHandler {
     async fn send_message(&self, channel: &str, message: Message) -> Result<(), SendError> {
         let body: SendRequest = SendRequest { message };
         let url = format!("{}/send/{}", self.host, channel);
-
-        info!("Sending message to channel: {}", channel);
-
         let request = Request::post(&url)
             .header("Content-Type", "application/json")
             .body(serde_json::to_string(&body).map_err(|e| {
@@ -57,9 +54,6 @@ impl MessageSender for RequestMessageHandler {
 impl MessageReceiver for RequestMessageHandler {
     async fn receive_messages(&self, channel: &str) -> Result<Vec<Message>, ReceiveError> {
         let url = format!("{}/receive/{}", self.host, channel);
-
-        info!("Receiving messages from channel: {}", channel);
-
         let request = Request::get(&url).send().await.map_err(|e| {
             error!("Failed to send request: {}", e);
             ReceiveError::UnknownError
