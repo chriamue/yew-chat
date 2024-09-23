@@ -31,5 +31,5 @@ cargo run --bin yew_chat_server --features server
 ### Running the Example
 
 ```bash
-cargo run --example request_app --features yew
+trunk serve request_app.html --features yew
 ```

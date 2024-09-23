@@ -1,6 +1,6 @@
 use std::sync::{Arc, Mutex};
 use yew::prelude::*;
-use yew_chat::prelude::{ChatApp, SimpleMessageHandler};
+use yew_chat::prelude::{ChatApp, MessageHandler, SimpleMessageHandler};
 
 #[function_component(App)]
 pub fn app() -> Html {
@@ -11,7 +11,7 @@ pub fn app() -> Html {
 
     let handler = Arc::new(SimpleMessageHandler {
         message_queue: message_queue.clone(),
-    });
+    }) as Arc<dyn MessageHandler>;
 
     html! {
         <div>
