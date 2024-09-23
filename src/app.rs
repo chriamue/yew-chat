@@ -1,37 +1,8 @@
-use async_trait::async_trait;
 use std::sync::{Arc, Mutex};
 use yew::prelude::*;
 use yew_chat::prelude::{
-    Chat, ChatComp, Message, MessageInputComp, MessageReceiver, MessageSender, ReceiveError,
-    SendError,
+    Chat, ChatComp, MessageInputComp, MessageReceiver, MessageSender, SimpleMessageHandler,
 };
-
-struct SimpleMessageHandler {
-    message_queue: Arc<Mutex<Vec<Message>>>,
-}
-
-#[async_trait]
-impl MessageSender for SimpleMessageHandler {
-    async fn send_message(&self, _channel: &str, message: Message) -> Result<(), SendError> {
-        let mut queue = self.message_queue.lock().unwrap();
-        queue.push(message);
-        Ok(())
-    }
-}
-
-#[async_trait]
-impl MessageReceiver for SimpleMessageHandler {
-    async fn receive_messages(&self, _channel: &str) -> Result<Vec<Message>, ReceiveError> {
-        let mut queue = self.message_queue.lock().unwrap();
-        if !queue.is_empty() {
-            let messages = queue.clone();
-            queue.clear();
-            Ok(messages)
-        } else {
-            Err(ReceiveError::UnknownError)
-        }
-    }
-}
 
 #[function_component(App)]
 pub fn app() -> Html {
