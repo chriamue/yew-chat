@@ -8,8 +8,9 @@ use axum::{
 
 use crate::api::{ReceiveResponse, SendRequest};
 use std::sync::Arc;
+use tokio::sync::Mutex;
 
-pub fn create_router(storage: Arc<dyn MessageStorage + Send + Sync>) -> Router {
+pub fn create_router(storage: Arc<Mutex<dyn MessageStorage>>) -> Router {
     Router::new()
         .route("/send/:channel", post(send_message))
         .route("/receive/:channel", get(receive_messages))
@@ -29,12 +30,14 @@ pub fn create_router(storage: Arc<dyn MessageStorage + Send + Sync>) -> Router {
     )
 )]
 pub async fn send_message(
-    State(sender): State<Arc<dyn MessageStorage + Send + Sync>>,
+    State(sender): State<Arc<Mutex<dyn MessageStorage>>>,
     Path(channel): Path<String>,
     Json(message): Json<SendRequest>,
 ) -> Result<Json<()>, Json<SendError>> {
     let message = message.message;
     sender
+        .lock()
+        .await
         .send_message(&channel, message)
         .await
         .map(|_| Json(()))
@@ -53,10 +56,12 @@ pub async fn send_message(
     )
 )]
 pub async fn receive_messages(
-    State(receiver): State<Arc<dyn MessageStorage + Send + Sync>>,
+    State(receiver): State<Arc<Mutex<dyn MessageStorage>>>,
     Path(channel): Path<String>,
 ) -> Result<Json<ReceiveResponse>, Json<ReceiveError>> {
     receiver
+        .lock()
+        .await
         .receive_messages(&channel)
         .await
         .map(|messages| Json(ReceiveResponse { messages }))

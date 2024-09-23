@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use tokio::sync::Mutex;
 use tower_http::cors::CorsLayer;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
@@ -7,7 +8,7 @@ use yew_chat::server::{create_router, ApiDoc};
 
 #[tokio::main]
 async fn main() {
-    let storage = Arc::new(MemoryMessageStorage::new());
+    let storage = Arc::new(Mutex::new(MemoryMessageStorage::new()));
 
     // Create the router
     let app = create_router(storage)
