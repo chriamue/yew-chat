@@ -4,7 +4,7 @@ use async_trait::async_trait;
 
 #[cfg(not(feature = "yew"))]
 #[async_trait]
-pub trait MessageReceiver: Send + Sync {
+pub trait MessageReceiver: Send {
     async fn receive_messages(&self, channel: &str) -> Result<Vec<Message>, ReceiveError>;
 }
 
