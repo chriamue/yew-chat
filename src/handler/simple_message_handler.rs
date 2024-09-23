@@ -1,3 +1,4 @@
+use crate::handler::message_handler::MessageHandler;
 use crate::model::{Message, MessageReceiver, MessageSender, ReceiveError, SendError};
 use async_trait::async_trait;
 use std::sync::{Arc, Mutex};
@@ -5,6 +6,8 @@ use std::sync::{Arc, Mutex};
 pub struct SimpleMessageHandler {
     pub message_queue: Arc<Mutex<Vec<Message>>>,
 }
+
+impl MessageHandler for SimpleMessageHandler {}
 
 #[async_trait(?Send)]
 impl MessageSender for SimpleMessageHandler {

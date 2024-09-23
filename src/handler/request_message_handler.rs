@@ -1,4 +1,5 @@
 use crate::api::{ReceiveResponse, SendRequest};
+use crate::handler::message_handler::MessageHandler;
 use crate::model::{Message, MessageReceiver, MessageSender, ReceiveError, SendError};
 use async_trait::async_trait;
 use gloo::net::http::{Request, Response};
@@ -7,6 +8,8 @@ use log::{error, info};
 pub struct RequestMessageHandler {
     pub host: String,
 }
+
+impl MessageHandler for RequestMessageHandler {}
 
 async fn handle_response(response: Response) -> Result<(), SendError> {
     if response.status() == 200 {

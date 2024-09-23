@@ -1,8 +1,10 @@
+mod chat_app;
 mod chat_comp;
 mod input;
 mod message_comp;
 mod message_input_comp;
 
+pub use chat_app::ChatApp;
 pub use chat_comp::ChatComp;
 pub use input::Input;
 pub use message_comp::MessageComp;
