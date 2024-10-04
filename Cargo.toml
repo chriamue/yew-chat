@@ -24,7 +24,14 @@ path = "src/lib.rs"
 
 [features]
 default = []
-server = ["axum", "axum-macros", "tokio", "tower-http", "utoipa", "utoipa-swagger-ui"]
+server = [
+    "axum",
+    "axum-macros",
+    "tokio",
+    "tower-http",
+    "utoipa",
+    "utoipa-swagger-ui",
+]
 yew = ["dep:yew", "web-sys", "wasm-bindgen-futures", "gloo"]
 
 [dependencies]
@@ -43,3 +50,8 @@ utoipa-swagger-ui = { version = "7", features = ["axum"], optional = true }
 web-sys = { version = "0.3", optional = true }
 wasm-bindgen-futures = { version = "0.4", optional = true }
 yew = { version = "0.21", features = ["csr"], optional = true }
+
+[[example]]
+name = "request_app"
+path = "examples/request_app.rs"
+required-features = ["yew"]

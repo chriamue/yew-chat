@@ -3,7 +3,7 @@ use crate::handler::message_handler::MessageHandler;
 use crate::model::{Message, MessageReceiver, MessageSender, ReceiveError, SendError};
 use async_trait::async_trait;
 use gloo::net::http::{Request, Response};
-use log::{error, info};
+use log::error;
 
 pub struct RequestMessageHandler {
     pub host: String,

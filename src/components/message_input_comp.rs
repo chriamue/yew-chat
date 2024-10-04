@@ -25,6 +25,7 @@ pub fn message_input_comp(props: &MessageInputProps) -> Html {
 
         Callback::from(move |message: String| {
             let message = Message {
+                id: None,
                 sender: current_user.clone(),
                 content: message,
                 timestamp: chrono::Utc::now(),
