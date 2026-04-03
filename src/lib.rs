@@ -1,11 +1,10 @@
 mod api;
 #[cfg(feature = "yew")]
 mod components;
+mod handler;
 mod model;
 #[cfg(feature = "server")]
 pub mod server;
-
-mod handler;
 
 pub mod prelude {
     pub use crate::api::*;

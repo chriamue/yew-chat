@@ -1,6 +1,6 @@
 [package]
 name = "yew-chat"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 description = "A simple chat application built with Yew"
 
@@ -44,7 +44,7 @@ web-sys = { version = "0.3", optional = true }
 wasm-bindgen-futures = { version = "0.4", optional = true }
 yew = { version = "0.23", features = ["csr"], optional = true }
 
-[[example]]
+[[bin]]
 name = "request_app"
 path = "examples/request_app.rs"
 required-features = ["yew"]

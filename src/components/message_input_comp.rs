@@ -1,46 +1,35 @@
 use crate::components::Input;
-use crate::model::{Message, MessageSender};
-use std::sync::Arc;
+use crate::handler::MessageHandler;
+use crate::model::Message;
 use yew::prelude::*;
 
-#[derive(Properties, Clone)]
-pub struct MessageInputProps {
+#[derive(Properties, Clone, PartialEq)]
+pub struct MessageInputProps<H: MessageHandler> {
     pub channel: String,
-    pub sender: Arc<dyn MessageSender>,
+    pub handler: H,
     pub current_user: String,
 }
 
-impl PartialEq for MessageInputProps {
-    fn eq(&self, other: &Self) -> bool {
-        self.current_user == other.current_user && Arc::ptr_eq(&self.sender, &other.sender)
-    }
-}
-
 #[function_component(MessageInputComp)]
-pub fn message_input_comp(props: &MessageInputProps) -> Html {
+pub fn message_input_comp<H: MessageHandler>(props: &MessageInputProps<H>) -> Html {
     let on_submit = {
         let channel = props.channel.clone();
-        let sender = props.sender.clone();
+        let handler = props.handler.clone();
         let current_user = props.current_user.clone();
 
-        Callback::from(move |message: String| {
+        Callback::from(move |content: String| {
             let message = Message {
                 id: None,
                 sender: current_user.clone(),
-                content: message,
+                content,
                 timestamp: chrono::Utc::now(),
             };
             wasm_bindgen_futures::spawn_local({
                 let channel = channel.clone();
-                let sender = sender.clone();
+                let handler = handler.clone();
                 async move {
-                    match sender.send_message(&channel, message).await {
-                        Ok(_) => {
-                            log::info!("Message sent successfully");
-                        }
-                        Err(e) => {
-                            log::error!("Failed to send message: {:?}", e);
-                        }
+                    if let Err(e) = handler.send_message(&channel, message).await {
+                        log::error!("Failed to send message: {:?}", e);
                     }
                 }
             });
